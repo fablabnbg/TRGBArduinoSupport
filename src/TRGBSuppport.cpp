@@ -3,6 +3,11 @@
  *
  *  Created on: 29.12.2022
  *      Author: ian
+ *
+ *      Code is copied from official examples (https://github.com/Xinyuan-LilyGO/T-RGB/tree/main/example/factory).
+ *      No logic changes, but restructured for easier use.
+ *
+ *      License: MIT
  */
 
 #include <TRGBSuppport.h>
@@ -65,9 +70,9 @@ void TRGBSuppport::init() {
 	pinMode(TP_INT_PIN, INPUT_PULLUP);
 	attachInterrupt(TP_INT_PIN, [] { touch_pin_get_int = true; }, FALLING);
 
-	  tft_init();
-	  esp_lcd_panel_handle_t panel_handle = NULL;
-	  esp_lcd_rgb_panel_config_t panel_config = {
+	tft_init();
+	esp_lcd_panel_handle_t panel_handle = NULL;
+	esp_lcd_rgb_panel_config_t panel_config = {
 	      .clk_src = LCD_CLK_SRC_PLL160M,
 	      .timings =
 	          {
@@ -127,6 +132,7 @@ void TRGBSuppport::init() {
 	  ESP_ERROR_CHECK(esp_lcd_panel_reset(panel_handle));
 	  ESP_ERROR_CHECK(esp_lcd_panel_init(panel_handle));
 
+	  // Draw a start logo (before init of LVGL)
 	  esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, 480, 480, logo_img);
 
 	  lv_init();
@@ -148,7 +154,7 @@ void TRGBSuppport::init() {
 	  disp_drv.user_data = panel_handle;
 	  lv_disp_t *disp = lv_disp_drv_register(&disp_drv);
 
-	  lv_indev_drv_init(&indev_drv);  //TOD: Correct order?
+	  lv_indev_drv_init(&indev_drv);
 	  indev_drv.type = LV_INDEV_TYPE_POINTER;
 	  indev_drv.read_cb = lv_touchpad_read;
 	  lv_indev_drv_register(&indev_drv);

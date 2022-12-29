@@ -1,0 +1,27 @@
+{
+  "name": "TRGBArduinoSupport",
+  "version": "0.0.1"
+  "description": "T-RGB device support",
+  "keywords": "T-RGB, FT3267, XL9535",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/euphi/TRGBArduinoSupport"
+  },
+  "authors":
+  [
+    {
+      "name": "Ian Hubbertz",
+      "email": "ian@fabmail.org",
+      "url": "https://www.john-smith/contact"
+    }
+  ],
+  "license": ["MIT", "Apache-2.0"],
+  "homepage": "https://www.helloworld.org/",
+  "dependencies": {
+    "lvgl": "~8.3.3"
+  },
+  "frameworks": "arduino",
+  "platforms": "espressif32"
+  
+}

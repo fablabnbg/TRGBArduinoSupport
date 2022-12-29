@@ -3,10 +3,15 @@
  *
  *  Created on: 29.12.2022
  *      Author: ian
+ *
+ *      Code is copied from official examples (https://github.com/Xinyuan-LilyGO/T-RGB/tree/main/example/factory).
+ *      No logic changes, but restructured for easier use.
+ *
+ *      License: MIT
+ *
  */
 
-#ifndef SRC_TRGBSUPPPORT_H_
-#define SRC_TRGBSUPPPORT_H_
+#pragma once
 
 #include "XL9535_driver.h"		// I/O extionsion via I2C
 
@@ -94,5 +99,3 @@ public:
 	TRGBSuppport();
 	void init();
 };
-
-#endif /* SRC_TRGBSUPPPORT_H_ */
