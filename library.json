@@ -19,7 +19,7 @@
   "license": ["MIT", "Apache-2.0"],
   "homepage": "https://www.helloworld.org/",
   "dependencies": {
-    "lvgl": "~8.3.3"
+    "lvgl": "^8.2.0"
   },
   "frameworks": "arduino",
   "platforms": "espressif32"
