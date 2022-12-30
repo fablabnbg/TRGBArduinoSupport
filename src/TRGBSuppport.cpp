@@ -14,7 +14,13 @@
 
 #include "img.h"  //unsern Logo
 
+// WiFi include needed for deep sleep support.
+#include "WiFi.h"
+
+
 static bool touch_pin_get_int=false;
+
+static RTC_DATA_ATTR uint16_t bootCount = 0;
 
 static void lv_touchpad_read(lv_indev_drv_t *indev_driver, lv_indev_data_t *data) {
   if (touch_pin_get_int) {
@@ -42,11 +48,14 @@ static void example_lvgl_flush_cb(lv_disp_drv_t *drv, const lv_area_t *area, lv_
 
 
 TRGBSuppport::TRGBSuppport() {
-
+	bootCount++;
 }
 
 
+
 void TRGBSuppport::init() {
+	Serial.print("Boot count: ");
+	Serial.println(bootCount);
 	//Wire.begin(IIC_SDA_PIN, IIC_SCL_PIN, (uint32_t) 400000);
 	xl.begin();
 	uint8_t pin = (1 << PWR_EN_PIN)  | (1 << LCD_CS_PIN)  | (1 << TP_RES_PIN)
@@ -159,6 +168,27 @@ void TRGBSuppport::init() {
 	  indev_drv.read_cb = lv_touchpad_read;
 	  lv_indev_drv_register(&indev_drv);
 }
+
+
+void TRGBSuppport::deepSleep(void) {
+  WiFi.disconnect();
+  detachInterrupt(TP_INT_PIN);
+  xl.pinMode8(0, 0xff, INPUT);
+  xl.pinMode8(1, 0xff, INPUT);
+  xl.read_all_reg();
+  // If the SD card is initialized, it needs to be unmounted.
+  if (SD_MMC.cardSize())
+    SD_MMC.end();
+
+  digitalWrite(EXAMPLE_PIN_NUM_BK_LIGHT, EXAMPLE_LCD_BK_LIGHT_OFF_LEVEL);
+
+  Serial.println("Enter deep sleep");
+  delay(1000);
+
+  esp_sleep_enable_ext0_wakeup((gpio_num_t)TP_INT_PIN, 0);
+  esp_deep_sleep_start();
+}
+
 
 void TRGBSuppport::lcd_send_data(uint8_t data) {
   uint8_t n;

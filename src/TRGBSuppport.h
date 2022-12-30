@@ -27,6 +27,7 @@
 #define TOUCH_MODULE_FT3267
 #include "ft3267.h"
 
+#include <SD_MMC.h>
 
 typedef struct {
   uint8_t cmd;
@@ -94,8 +95,8 @@ private:
 	void lcd_data(const uint8_t *data, int len);
 	void lcd_send_data(uint8_t data);
 
-
 public:
 	TRGBSuppport();
+	void deepSleep();
 	void init();
 };
