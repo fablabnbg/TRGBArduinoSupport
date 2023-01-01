@@ -62,7 +62,7 @@ Important options:
 
 * `-DARDUINO_USB_CDC_ON_BOOT=1`: Use onboard USB as serial device (for debug output). (See Caveats below!)
 * `-DBOARD_HAS_PSRAM` - default platformio configuration for esp32-s3 does not enable PSRAM support, so enable it here
-* `-DLV_CONF_PATH={$PLATFORMIO_WORKSPACE_DIR}/lv_conf.h`- If you want to use the lvgl library there are issues to find the configuration file. So explicitly state where it is located
+* `-DLV_CONF_PATH=${platformio.include_dir}/lv_conf.h`- If you want to use the lvgl library there are issues to find the configuration file. So explicitly state where it is located
 
 * `git@github.com:fablabnbg/TRGBArduinoSupport.git` - intgegrate this library
 
