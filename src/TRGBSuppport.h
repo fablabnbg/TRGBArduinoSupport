@@ -94,9 +94,22 @@ private:
 	void lcd_cmd(const uint8_t cmd);
 	void lcd_data(const uint8_t *data, int len);
 	void lcd_send_data(uint8_t data);
+	static esp_lcd_panel_handle_t register_tft();
 
 public:
 	TRGBSuppport();
 	void deepSleep();
 	void init();
+	void SD_init(); //could be static, but I guess it is too confusing.
+
+	float getBatVoltage() const {return (analogRead(BAT_VOLT_PIN) * 2 * 3.3) / 4096;}
+	bool isBatCharging() const {return getBatVoltage() > 4.1;}  // LiIon end-of-charge voltage ~ 4.2V, so charger voltage is approx this voltage.
+
+	// **** functions from official example that give some useful information ****
+	static void print_chip_info();  // ESP32 hardware details
+
+	//     Scan I2C (Groove connector) for devices.
+	//         0x20: I/O extension (XL9535)
+	//         0x38: Touchpad-controller (FT3267)
+	static void scan_iic();
 };
