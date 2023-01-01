@@ -51,7 +51,7 @@ build_flags =
 	-DARDUINO_USB_MODE=1
 	-DARDUINO_USB_CDC_ON_BOOT=1
 	-DBOARD_HAS_PSRAM
-	-DLV_CONF_PATH={$PLATFORMIO_WORKSPACE_DIR}/lv_conf.h
+	-DLV_CONF_PATH=${platformio.include_dir}/lv_conf.h
 board_build.cpu = esp32s3
 board_build.arduino.memory_type = qio_opi
 lib_deps = 
@@ -65,6 +65,8 @@ Important options:
 * `-DLV_CONF_PATH={$PLATFORMIO_WORKSPACE_DIR}/lv_conf.h`- If you want to use the lvgl library there are issues to find the configuration file. So explicitly state where it is located
 
 * `git@github.com:fablabnbg/TRGBArduinoSupport.git` - intgegrate this library
+
+Create
 
 In your arduino code (`src/main.cpp`):
 
@@ -89,6 +91,17 @@ void loop() {
 }
 
 ```
+
+The library comes with integrated dependencies to lvgl graphics library to simplify using it.
+Therefore it is necessary to have an `lv_conf.h` file. So please copy the example from the example directory to your include path. There is no direct need to adapt it, but you can if you want so (e.g. to enable/disable othere fonts).
+
+Under Linux, the easiest way to do this: (in the projects main directory)
+
+```
+cp .pio/libdeps/esp32-s3-devkitc-1/TRGBArduinoSupport/examples/lv_conf.h include/
+```
+
+You also can download the file (https://raw.githubusercontent.com/fablabnbg/TRGBArduinoSupport/main/examples/lv_conf.h) and save it to the include directory. 
 
 ## Caveeats
 
