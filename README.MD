@@ -60,7 +60,7 @@ lib_deps =
 
 Important options:
 
-* `-DARDUINO_USB_CDC_ON_BOOT=1`: Use onboard USB as serial device (for debug output). (See Caveeats below!!)
+* `-DARDUINO_USB_CDC_ON_BOOT=1`: Use onboard USB as serial device (for debug output). (See Caveats below!)
 * `-DBOARD_HAS_PSRAM` - default platformio configuration for esp32-s3 does not enable PSRAM support, so enable it here
 * `-DLV_CONF_PATH={$PLATFORMIO_WORKSPACE_DIR}/lv_conf.h`- If you want to use the lvgl library there are issues to find the configuration file. So explicitly state where it is located
 
@@ -68,7 +68,7 @@ Important options:
 
 Create `src/main.cpp`:
 
-```
+```C++
 #include <TRGBSuppport.h>
 
 TRGBSuppport trgb;
@@ -89,8 +89,8 @@ void loop() {
 
 ```
 
-The library comes with integrated dependencies to lvgl graphics library to simplify using it.
-Therefore it is necessary to have an `lv_conf.h` file. So please copy the example from the example directory to your include path. There is no direct need to adapt it, but you can if you want so (e.g. to enable/disable othere fonts).
+The library comes with integrated dependencies to [lvgl graphics library](https://lvgl.io) to simplify using it.
+Therefore it is necessary to have an `lv_conf.h` file. So please copy the example from the example directory to your include path. There is no direct need to adapt it, but you can if you want so (e.g. to enable/disable other fonts).
 
 Under Linux, the easiest way to do this: (in the projects main directory)
 
