@@ -66,22 +66,19 @@ Important options:
 
 * `git@github.com:fablabnbg/TRGBArduinoSupport.git` - intgegrate this library
 
-Create
-
-In your arduino code (`src/main.cpp`):
+Create `src/main.cpp`:
 
 ```
 #include <TRGBSuppport.h>
 
 TRGBSuppport trgb;
 void setup() {
-  Wire.begin(IIC_SDA_PIN, IIC_SCL_PIN, (uint32_t)400000);
   Serial.begin(115200);
   Serial.setTxTimeoutMs(1);  // workaround for blocking output if no host is connected to native USB CDC
   delay(100);   // Rumors say it helps avoid sporadical crashes after wakeup from deep-sleep
   trgb.init();
   
-  // load your UI etc.
+  // load your UI etc. (see example https://github.com/fablabnbg/TRGBArduinoSupport/tree/main/examples/ui_example)
 }
 
 void loop() {
@@ -103,7 +100,22 @@ cp .pio/libdeps/esp32-s3-devkitc-1/TRGBArduinoSupport/examples/lv_conf.h include
 
 You also can download the file (https://raw.githubusercontent.com/fablabnbg/TRGBArduinoSupport/main/examples/lv_conf.h) and save it to the include directory. 
 
-## Caveeats
+## UI Example
+
+There is an example UI in https://github.com/fablabnbg/TRGBArduinoSupport/tree/main/examples/ui_example .
+It shows a chart with battery voltage, the current time and IP adress of WiFi connection. There is also a "Standby" button to send the device into deep-sleep. It can be woken up again by touch.
+You can copy it to your platformio project `src`directory, e.g. (Linux) by
+```
+cp .pio/libdeps/esp32-s3-devkitc-1/TRGBArduinoSupport/examples/ui_example/* src/
+```
+There is also an example `platformio.ini` file:
+```
+cp .pio/libdeps/esp32-s3-devkitc-1/TRGBArduinoSupport/examples/platformio.ini .
+```
+
+Adapt `src/main.cpp` to your needs (change Wifi SSID and password) and then build and upload it with `platformio run -t upload`.
+
+## Caveats
 
 ### USB CDC
 
@@ -116,8 +128,8 @@ To use the USB as Serial device, you must set these two configuration options:
 
 The first one activates the USB support in general, the second one activates the support for USB as `Serial` device.
 Unfortunately the direct USB support has  big disadvantage: 
-  **Output to `Serial` blocks when the output buffer is full.** As long as there is no terminal connected to the ESP32, the buffer will run full quickly and the device seems to be frozen.
+  **Output to `Serial` blocks when the output buffer is full.** As long as there is no terminal emulator (like miniterm.py) connected to the ESP32, the buffer will run full quickly and the device gets laggy. If you use `Serial.flush()` somewhere in your code, it will block until the Serial device is read from terminal.
   
-  So, you must connect a terminal always OR set `ARDUINO_USB_CDC_ON_BOOT` to 0.
-
+  * So, you should connect a terminal emulator OR set `ARDUINO_USB_CDC_ON_BOOT` to 0. 
+  * As a workaround you can set the tx timeout to a low value (`Serial.setTxTimeoutMs(1);`) and you must avoid using `Serial.flush()`.
 
