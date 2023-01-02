@@ -1,6 +1,7 @@
 This repo adds support for T-RGB device to use with arduino framework and platformio.
 
-It's just a copy of the official example code into a sufficient structure. Some functions were reordered are newly combined. 
+It's just a copy of the official example code into a sufficient structure. Some functions were reordered or newly combined.
+There is also one bugfix to the touchpad-integration. 
 
 ## Why we created this library?
 
@@ -132,4 +133,8 @@ Unfortunately the direct USB support has  big disadvantage:
   
   * So, you should connect a terminal emulator OR set `ARDUINO_USB_CDC_ON_BOOT` to 0. 
   * As a workaround you can set the tx timeout to a low value (`Serial.setTxTimeoutMs(1);`) and you must avoid using `Serial.flush()`.
+
+### Touchpad
+
+The examples from LilyGo for touchpad are quite confusing. I changed the code to use only the ft3267 touch controller and fixed a bug in the callback functions. The original code does not correctly behave when touch is released: It sends a position 0,0 once after release. This is fixed in the  TRGBArduinoSupport code.
 
