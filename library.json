@@ -12,12 +12,15 @@
   [
     {
       "name": "Ian Hubbertz",
-      "email": "ian@fabmail.org",
-      "url": "https://www.john-smith/contact"
+      "email": "ian@fabmail.org"
+    },
+    {
+      "name": "FabLab Region Nürnberg e. V.",
+      "email": "info@fablab-nuernberg.de",
+      "homepage": "https://fablab-nuernberg.de"
     }
   ],
   "license": ["MIT", "Apache-2.0"],
-  "homepage": "https://www.helloworld.org/",
   "dependencies": {
     "lvgl": "^8.2.0"
   },
