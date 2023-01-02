@@ -33,7 +33,7 @@ The idea is that you can start right away and don't need to care about copying c
 to build your own applications. Therefore we copied the necessary code together and encapsulated it in
 this libary.
 
-You need _platformio_ to install and run this libary.
+You need [platformio](https://platformio.org/platformio-ide) to install and run this libary.
 
 So, create your own project with:
 
@@ -138,3 +138,4 @@ Unfortunately the direct USB support has  big disadvantage:
 
 The examples from LilyGo for touchpad are quite confusing. I changed the code to use only the ft3267 touch controller and fixed a bug in the callback functions. The original code does not correctly behave when touch is released: It sends a position 0,0 once after release. This is fixed in the  TRGBArduinoSupport code.
 
+**It seems that the FT3267 is only used on the "oval" variant of the T-RGB device.** The round variant is therefore not yet supported.
