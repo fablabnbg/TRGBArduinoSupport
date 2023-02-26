@@ -24,10 +24,7 @@ void updateClock(const String &str) {
 }
 
 
-void setup() {
-  Wire.begin(IIC_SDA_PIN, IIC_SCL_PIN, (uint32_t)400000);
-  Serial.begin(115200);
-  Serial.setTxTimeoutMs(1);  // workaround for blocking output if no host is connected to native USB CDC
+void setup() {  
   delay(100);   // Rumors say it helps avoid sporadical crashes after wakeup from deep-sleep
   trgb.init();
   
