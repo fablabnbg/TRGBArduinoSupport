@@ -17,8 +17,8 @@
 #define LV_ATTRIBUTE_MEM_ALIGN
 #endif
 
-#ifndef LV_ATTRIBUTE_IMG_FLN-LOGO
-#define LV_ATTRIBUTE_IMG_FLN-LOGO
+#ifndef LV_ATTRIBUTE_IMG_FLN
+#define LV_ATTRIBUTE_IMG_FLN
 #endif
 const unsigned char logo_img[]= { /* 0X00,0X10,0XE0,0X01,0XE0,0X01,0X01,0X1B, */
 

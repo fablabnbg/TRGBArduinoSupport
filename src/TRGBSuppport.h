@@ -104,6 +104,7 @@ public:
 
 	float getBatVoltage() const {return (analogRead(BAT_VOLT_PIN) * 2 * 3.3) / 4096;}
 	bool isBatCharging() const {return getBatVoltage() > 4.1;}  // LiIon end-of-charge voltage ~ 4.2V, so charger voltage is approx this voltage.
+	uint16_t getBootCount();
 
 	// **** functions from official example that give some useful information ****
 	static void print_chip_info();  // ESP32 hardware details
@@ -112,4 +113,5 @@ public:
 	//         0x20: I/O extension (XL9535)
 	//         0x38: Touchpad-controller (FT3267)
 	static void scan_iic();
+
 };

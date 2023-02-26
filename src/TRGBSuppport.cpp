@@ -21,6 +21,8 @@
 static bool touch_pin_get_int=false;
 
 static RTC_DATA_ATTR uint16_t bootCount = 0;
+uint16_t TRGBSuppport::getBootCount() { return bootCount; }
+
 
 static void lv_touchpad_read(lv_indev_drv_t *indev_driver, lv_indev_data_t *data) {
   if (touch_pin_get_int) {
@@ -85,8 +87,10 @@ esp_lcd_panel_handle_t TRGBSuppport::register_tft() {
 }
 
 void TRGBSuppport::init() {
-	Serial.print("Boot count: ");
-	Serial.println(bootCount);
+	Serial.begin(115200);
+	Serial.setTxTimeoutMs(1);	// workaround to minimize blocking time for output to HWCDCSerial (Serial), if no host is connected.
+	Serial.print("Init T-RGB device. Bootcount:");
+	Serial.println(getBootCount());
 	Wire.begin(IIC_SDA_PIN, IIC_SCL_PIN, (uint32_t) 400000);
 	xl.begin();
 	uint8_t pin = (1 << PWR_EN_PIN)  | (1 << LCD_CS_PIN)  | (1 << TP_RES_PIN)
