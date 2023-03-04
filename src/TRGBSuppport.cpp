@@ -29,9 +29,13 @@ static void lv_touchpad_read(lv_indev_drv_t *indev_driver, lv_indev_data_t *data
     uint8_t touch_points_num;
     uint16_t x, y;
     ft3267_read_pos(&touch_points_num, &x, &y);
-    data->point.x = x;
-    data->point.y = y;
-    data->state = (touch_points_num > 0) ? LV_INDEV_STATE_PRESSED : LV_INDEV_STATE_RELEASED;
+    if (touch_points_num > 0) {
+    	data->point.x = x;
+    	data->point.y = y;
+    	data->state = LV_INDEV_STATE_PRESSED;
+    } else {
+    	data->state =  LV_INDEV_STATE_RELEASED;
+    }
     touch_pin_get_int = false;
   } else {
     data->state = LV_INDEV_STATE_RELEASED;
