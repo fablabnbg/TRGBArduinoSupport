@@ -150,15 +150,16 @@ void TRGBSuppport::deepSleep(void) {
   xl.pinMode8(1, 0xff, INPUT);
   xl.read_all_reg();
   // If the SD card is initialized, it needs to be unmounted.
-  if (SD_MMC.cardSize())
-    SD_MMC.end();
+  if (SD_MMC.cardSize()) SD_MMC.end();
 
   digitalWrite(EXAMPLE_PIN_NUM_BK_LIGHT, EXAMPLE_LCD_BK_LIGHT_OFF_LEVEL);
 
   Serial.println("Enter deep sleep");
-  delay(1000);
+  delay(2000);
 
-  esp_sleep_enable_ext0_wakeup((gpio_num_t)TP_INT_PIN, 0);
+  esp_sleep_enable_ext0_wakeup((gpio_num_t)TP_INT_PIN, 0);		// Wakeup by touch
+  pinMode(GPIO_NUM_0, INPUT_PULLUP);
+  //esp_sleep_enable_ext0_wakeup((gpio_num_t) GPIO_NUM_0, 0);	// Wakeup by boot-pin (TODO: not really useful for now, because display is not initialized correctly)
   esp_deep_sleep_start();
 }
 
@@ -208,7 +209,6 @@ void TRGBSuppport::tft_init(void) {
 
   // Reset the display and touch
 
-// Original example starts with setting RST to 1. seems unnecessary, so I commented it out to save some startup time
 //  xl.digitalWrite(LCD_RST_PIN, 1);
 //  vTaskDelay(200 / portTICK_PERIOD_MS);
   xl.digitalWrite(LCD_RST_PIN, 0);
@@ -234,12 +234,16 @@ void TRGBSuppport::tft_init(void) {
     cmd++;
   }
   Serial.println("Register setup complete");
+  // Switch on backlight
+  pinMode(EXAMPLE_PIN_NUM_BK_LIGHT, OUTPUT);
+  digitalWrite(EXAMPLE_PIN_NUM_BK_LIGHT, EXAMPLE_LCD_BK_LIGHT_ON_LEVEL);
+
 }
 
 
 void TRGBSuppport::SD_init(void) {
   SD_MMC.setPins(SD_CLK_PIN, SD_CMD_PIN, SD_D0_PIN);
-  if (!SD_MMC.begin("/sdcard", true, true)) {
+  if (!SD_MMC.begin("/sdcard", true, true, BOARD_MAX_SDMMC_FREQ, 10)) { // max 10 open files (need more than the default 5 due to logging, replay, webserver etc.)
     Serial.println("Card Mount Failed");
     return;
   }
