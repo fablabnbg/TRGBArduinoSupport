@@ -1,12 +1,12 @@
 {
   "name": "TRGBArduinoSupport",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "T-RGB device support",
-  "keywords": "T-RGB, FT3267, XL9535",
+  "keywords": "T-RGB, FT3267, XL9535, LilyGO",
   "repository":
   {
     "type": "git",
-    "url": "https://github.com/euphi/TRGBArduinoSupport"
+    "url": "https://github.com/fablabnbg/TRGBArduinoSupport"
   },
   "authors":
   [
@@ -20,9 +20,9 @@
       "homepage": "https://fablab-nuernberg.de"
     }
   ],
-  "license": ["MIT", "Apache-2.0"],
+  "license": "MIT",
   "dependencies": {
-    "lvgl": "^8.2.0"
+    "lvgl": "^8.3.0"
   },
   "frameworks": "arduino",
   "platforms": "espressif32"
