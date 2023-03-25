@@ -48,8 +48,6 @@ Adapt the `platformio.ini` file to contain this section:
 platform = platformio/espressif32
 board = esp32-s3-devkitc-1
 framework = arduino
-platform_packages = 
-	framework-arduinoespressif32@https://github.com/espressif/arduino-esp32.git#2.0.5
 build_flags = 
 	-DARDUINO_USB_MODE=1
 	-DARDUINO_USB_CDC_ON_BOOT=1
@@ -58,7 +56,7 @@ build_flags =
 board_build.cpu = esp32s3
 board_build.arduino.memory_type = qio_opi
 lib_deps = 
-        git@github.com:fablabnbg/TRGBArduinoSupport.git
+        IanH/TRGBArduinoSupport
 ``` 
 
 Important options:
