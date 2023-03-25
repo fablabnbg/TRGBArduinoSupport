@@ -1,3 +1,5 @@
+Installation: [![PlatformIO Registry](https://badges.registry.platformio.org/packages/ianh/library/TRGBArduinoSupport.svg)](https://registry.platformio.org/libraries/ianh/TRGBArduinoSupport)
+
 This repo adds support for T-RGB device to use with arduino framework and platformio.
 
 It's just a copy of the official example code into a sufficient structure. Some functions were reordered or newly combined.
