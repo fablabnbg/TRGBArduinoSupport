@@ -99,6 +99,7 @@ private:
 public:
 	TRGBSuppport();
 	void deepSleep();
+	void restart();
 	void init();
 	void SD_init(); //could be static, but I guess it is too confusing.
 

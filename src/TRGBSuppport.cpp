@@ -163,6 +163,13 @@ void TRGBSuppport::deepSleep(void) {
   esp_deep_sleep_start();
 }
 
+void TRGBSuppport::restart(void) {
+	  WiFi.disconnect();
+	  if (SD_MMC.cardSize()) SD_MMC.end();
+	  Serial.println("Restart");
+	  delay(500);
+	  esp_restart();
+}
 
 void TRGBSuppport::lcd_send_data(uint8_t data) {
   uint8_t n;
