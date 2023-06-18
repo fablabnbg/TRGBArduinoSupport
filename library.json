@@ -1,6 +1,6 @@
 {
   "name": "TRGBArduinoSupport",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "T-RGB device support",
   "keywords": "T-RGB, FT3267, XL9535, LilyGO",
   "repository":
