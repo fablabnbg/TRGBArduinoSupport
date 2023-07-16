@@ -39,7 +39,7 @@ You need [platformio](https://platformio.org/platformio-ide) to install and run 
 
 So, create your own project with:
 
-`platformui init --board=esp32-s3-devkitc-1`
+`platformio init --board=esp32-s3-devkitc-1`
 
 Adapt the `platformio.ini` file to contain this section:
 
