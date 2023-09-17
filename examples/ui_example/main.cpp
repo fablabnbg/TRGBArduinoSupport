@@ -8,8 +8,6 @@ const char* ntpServer = "pool.ntp.org";
 const char* ssid = "fablabnbg";
 const char* password = "askForIt!";
 
-TRGBSuppport trgb;
-
 // Callback from UI if Standby-Button is pressed
 void ui_ev_standby(lv_event_t * e) {
 	trgb.deepSleep();

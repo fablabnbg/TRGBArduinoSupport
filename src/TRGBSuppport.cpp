@@ -17,6 +17,7 @@
 // WiFi include needed for deep sleep support.
 #include "WiFi.h"
 
+TRGBSuppport trgb;
 
 static bool touch_pin_get_int=false;
 
@@ -28,11 +29,13 @@ static void lv_touchpad_read(lv_indev_drv_t *indev_driver, lv_indev_data_t *data
   if (touch_pin_get_int) {
     uint8_t touch_points_num;
     uint16_t x, y;
-    ft3267_read_pos(&touch_points_num, &x, &y);
-    if (touch_points_num > 0) {
-    	data->point.x = x;
-    	data->point.y = y;
-    	data->state = LV_INDEV_STATE_PRESSED;
+    TouchLib& touch = trgb.getTouch();
+    touch.read();
+    if (touch.getPointNum() > 0) {
+        TP_Point t = touch.getPoint(0);
+        data->point.x = t.x;
+        data->point.y = t.y;
+        data->state = LV_INDEV_STATE_PRESSED;
     } else {
     	data->state =  LV_INDEV_STATE_RELEASED;
     }
@@ -53,7 +56,9 @@ static void lvgl_flush_cb(lv_disp_drv_t *drv, const lv_area_t *area, lv_color_t 
 }
 
 
-TRGBSuppport::TRGBSuppport() {
+TRGBSuppport::TRGBSuppport():
+        touch(Wire, IIC_SDA_PIN, IIC_SCL_PIN)
+{
 	bootCount++;
 }
 
@@ -113,9 +118,14 @@ void TRGBSuppport::init() {
 	// Draw a start logo (before init of LVGL)
 	esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, 480, 480, logo_img);
 
+	// Initialize touch
 	pinMode(TP_INT_PIN, INPUT_PULLUP);
-	attachInterrupt(TP_INT_PIN, [] { touch_pin_get_int = true; }, FALLING);
-    pinMode(BAT_VOLT_PIN, ANALOG);
+	attachInterrupt(TP_INT_PIN, [] { touch_pin_get_int = true; }, CHANGE);
+	touch.init();
+
+
+	pinMode(BAT_VOLT_PIN, ANALOG);
+
 
 	lv_init();
 	// alloc draw buffers used by LVGL from PSRAM
@@ -224,8 +234,6 @@ void TRGBSuppport::tft_init(void) {
   xl.digitalWrite(LCD_RST_PIN, 1);
   xl.digitalWrite(TP_RES_PIN, 1);
   vTaskDelay(100 / portTICK_PERIOD_MS);
-
-  ft3267_init(Wire);
 
   // Switch on backlight
   pinMode(EXAMPLE_PIN_NUM_BK_LIGHT, OUTPUT);

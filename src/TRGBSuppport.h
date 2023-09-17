@@ -15,6 +15,25 @@
 
 #include "XL9535_driver.h"		// I/O extionsion via I2C
 
+#if defined TRGB_OVAL
+#define TOUCH_MODULES_FT3267
+#elif defined TRGB_ROUND
+#define TOUCH_MODULES_CST_SELF
+#elif defined TRGB_ROUND_LARGE
+#define TOUCH_MODULES_GT911
+#endif
+
+
+//#define TOUCH_MODULES_GT911
+//#define TOUCH_MODULES_CST_SELF
+//#define TOUCH_MODULES_CST_MUTUAL
+//#define TOUCH_MODULES_ZTW622
+//#define TOUCH_MODULES_L58
+//#define TOUCH_MODULES_FT3267
+//#define TOUCH_MODULES_FT5x06
+
+#include "TouchLib.h"
+
 #include "lvgl.h"				// LVGL library
 #include "pin_config.h"
 #include <Arduino.h>
@@ -23,9 +42,6 @@
 #include "esp_lcd_panel_ops.h"
 #include "esp_lcd_panel_rgb.h"
 #include "esp_lcd_panel_vendor.h"
-
-#define TOUCH_MODULE_FT3267
-#include "ft3267.h"
 
 #include <SD_MMC.h>
 
@@ -85,7 +101,8 @@ DRAM_ATTR static const lcd_init_cmd_t st_init_cmds[] = {
 class TRGBSuppport {
 
 private:
-	XL9535 xl;
+	XL9535 xl;		// I/O Extender
+	TouchLib touch;
 
 	lv_disp_draw_buf_t disp_buf; // contains internal graphic buffer(s) called draw buffer(s)
 	lv_disp_drv_t disp_drv;      // contains callback functions
@@ -98,6 +115,7 @@ private:
 
 public:
 	TRGBSuppport();
+	TouchLib& getTouch(){return touch;};
 	void deepSleep();
 	void restart();
 	void init();
@@ -116,3 +134,6 @@ public:
 	static void scan_iic();
 
 };
+
+extern TRGBSuppport trgb;
+
