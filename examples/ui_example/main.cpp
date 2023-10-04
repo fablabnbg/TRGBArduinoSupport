@@ -4,6 +4,7 @@
 #include "WiFi.h"
 #include <DateTime.h>
 
+TRGBSuppport trgb;
 const char* ntpServer = "pool.ntp.org";
 const char* ssid = "fablabnbg";
 const char* password = "askForIt!";
