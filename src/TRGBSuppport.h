@@ -107,6 +107,7 @@ private:
 	lv_disp_draw_buf_t disp_buf; // contains internal graphic buffer(s) called draw buffer(s)
 	lv_disp_drv_t disp_drv;      // contains callback functions
 	lv_indev_drv_t indev_drv;
+	const unsigned char *customLogoImg = nullptr; // overrides the built-in logo_img when set, see setLogo()
 	void tft_init(void);
 	void lcd_cmd(const uint8_t cmd);
 	void lcd_data(const uint8_t *data, int len);
@@ -119,6 +120,17 @@ public:
 	void deepSleep();
 	void restart();
 	void init();
+
+	// Overrides the boot logo drawn at the start of init(), before LVGL is
+	// initialized. Call before init(). img must point to raw, header-less
+	// pixel data matching the panel's native format exactly: 480x480,
+	// RGB565 (2 bytes/pixel), little-endian (R5G6B5 packed into a 16-bit
+	// value, low byte first - matches LV_COLOR_16_SWAP=0), row-major.
+	// Passing a differently-sized or -formatted buffer will not be caught
+	// here and produces a corrupted/sheared image on screen (the panel's
+	// draw call has no way to detect a format mismatch by itself).
+	// Pass nullptr to go back to the built-in default logo_img.
+	void setLogo(const unsigned char *img) { customLogoImg = img; }
 	void SD_init(); //could be static, but I guess it is too confusing.
 
 	float getBatVoltage() const {return (analogRead(BAT_VOLT_PIN) * 2 * 3.3) / 4096;}

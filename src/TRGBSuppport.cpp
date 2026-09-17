@@ -64,6 +64,11 @@ TRGBSuppport::TRGBSuppport():
 
 esp_lcd_panel_handle_t TRGBSuppport::register_tft() {
 	esp_lcd_panel_handle_t panel_handle = NULL;
+	// Field order below must match esp_lcd_rgb_panel_config_t's current
+	// declaration order (C++ designated initializers enforce this) -
+	// on_frame_trans_done and user_ctx were removed from this struct by a
+	// newer ESP-IDF than when this code was written (both were NULL here
+	// anyway, i.e. unused, so dropping them changes nothing behaviorally).
 	esp_lcd_rgb_panel_config_t panel_config = { .clk_src = LCD_CLK_SRC_PLL160M,
 			.timings = { .pclk_hz = EXAMPLE_LCD_PIXEL_CLOCK_HZ, .h_res =
 					EXAMPLE_LCD_H_RES,
@@ -73,9 +78,12 @@ esp_lcd_panel_handle_t TRGBSuppport::register_tft() {
 					.vsync_back_porch = 30, .vsync_front_porch = 20, .flags = {
 							.pclk_active_neg = 1 } },
 			.data_width = 16, // RGB565 in parallel mode, thus 16bit in width
-			.psram_trans_align = 64, .hsync_gpio_num = EXAMPLE_PIN_NUM_HSYNC,
-			.vsync_gpio_num = EXAMPLE_PIN_NUM_VSYNC, .de_gpio_num =
-					EXAMPLE_PIN_NUM_DE, .pclk_gpio_num = EXAMPLE_PIN_NUM_PCLK,
+			.psram_trans_align = 64,
+			.hsync_gpio_num = EXAMPLE_PIN_NUM_HSYNC,
+			.vsync_gpio_num = EXAMPLE_PIN_NUM_VSYNC,
+			.de_gpio_num = EXAMPLE_PIN_NUM_DE,
+			.pclk_gpio_num = EXAMPLE_PIN_NUM_PCLK,
+			.disp_gpio_num = EXAMPLE_PIN_NUM_DISP_EN,
 			.data_gpio_nums = { // EXAMPLE_PIN_NUM_DATA0,
 					EXAMPLE_PIN_NUM_DATA13, EXAMPLE_PIN_NUM_DATA14,
 							EXAMPLE_PIN_NUM_DATA15, EXAMPLE_PIN_NUM_DATA16,
@@ -85,9 +93,8 @@ esp_lcd_panel_handle_t TRGBSuppport::register_tft() {
 							EXAMPLE_PIN_NUM_DATA11, // EXAMPLE_PIN_NUM_DATA12,
 							EXAMPLE_PIN_NUM_DATA1, EXAMPLE_PIN_NUM_DATA2,
 							EXAMPLE_PIN_NUM_DATA3, EXAMPLE_PIN_NUM_DATA4,
-							EXAMPLE_PIN_NUM_DATA5 }, .disp_gpio_num =
-					EXAMPLE_PIN_NUM_DISP_EN, .on_frame_trans_done = NULL,
-			.user_ctx = NULL, .flags = { .fb_in_psram = 1 } };
+							EXAMPLE_PIN_NUM_DATA5 },
+			.flags = { .fb_in_psram = 1 } };
 	// allocate frame buffer in PSRAM
 	ESP_ERROR_CHECK(esp_lcd_new_rgb_panel(&panel_config, &panel_handle));
 	ESP_ERROR_CHECK(esp_lcd_panel_reset(panel_handle));
@@ -115,8 +122,18 @@ void TRGBSuppport::init() {
 	tft_init();
 	esp_lcd_panel_handle_t panel_handle = register_tft();
 
-	// Draw a start logo (before init of LVGL)
-	esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, 480, 480, logo_img);
+	// Draw a start logo (before init of LVGL) - defaults to the built-in
+	// logo_img unless overridden via setLogo() beforehand.
+#ifdef TRGB_SKIP_DEFAULT_LOGO
+	// logo_img doesn't exist in this build (see img.h) - there is no
+	// fallback, so a missing setLogo() call is a caller bug, not something
+	// to silently paper over with a blank/garbage draw.
+	assert(customLogoImg != nullptr && "TRGB_SKIP_DEFAULT_LOGO is set but setLogo() was never called before init()");
+	esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, 480, 480, customLogoImg);
+#else
+	esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, 480, 480,
+			customLogoImg ? customLogoImg : logo_img);
+#endif
 
 	// Initialize touch
 	pinMode(TP_INT_PIN, INPUT_PULLUP);
